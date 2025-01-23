@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { useStatus } from "./hooks/useStatus";
-import { fetchArticles } from "./api/fetch";
+import { useStatus } from "./hooks";
+import { fetchArticles } from "./api";
 
 import "./App.css";
 
