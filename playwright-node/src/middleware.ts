@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
+// loggerMiddleware() logs a request with the timestamp,
+// specifying method and body of the request
 export const loggerMiddleware = (
   req: Request,
   res: Response,
@@ -17,6 +19,8 @@ export const loggerMiddleware = (
   next();
 };
 
+// errorHandlerMiddleware() logs a error with a timestamp,
+// and sends Internal Server Error error to the user
 export const errorHandlerMiddleware = (
   err: Error,
   req: Request,

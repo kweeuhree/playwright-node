@@ -1,6 +1,6 @@
 import { chromium } from "playwright";
 
-// Define and declare asynchronous function that takes url as an argument
+// scraper() takes in url as an argument and returns an array of articles or an error
 export const scraper = async (url: string) => {
   try {
     const scrapedStr = await scrape(url);
@@ -13,7 +13,9 @@ export const scraper = async (url: string) => {
   }
 };
 
-// Define and declare asynchronous function that takes url as an argument
+// scrape() takes in url as an argument, launches a new chromium window,
+// navigates to the specified url and scrapes first ten articles on the page
+// returns an array of objects with strings
 const scrape = async (url: string) => {
   // Launch a headless browser instance
   const browser = await chromium.launch({ headless: true });
@@ -45,6 +47,9 @@ const scrape = async (url: string) => {
   return links;
 };
 
+// prettify() takes in string as an argument and
+// splits each item in the string into title:url pairs
+// returns an array of objects with strings
 const prettify = (string: string) => {
   // Split the string by newlines to get an array of title-url pairs
   const articles = string.split("\n").map((item) => {

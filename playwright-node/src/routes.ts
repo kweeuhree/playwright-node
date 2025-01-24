@@ -3,7 +3,7 @@ import { scraper } from "./scraper";
 
 export const router = express.Router();
 
-// Get articles
+// Define a post request handler
 router.post(
   "/articles",
   async (req: Request, res: Response, next: NextFunction) => {
