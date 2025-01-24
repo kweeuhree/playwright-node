@@ -2,11 +2,12 @@
   "name": "playwright-node",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "start": "node ./dist/index.js",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
+    "build": "npm install && npm install --dev && npm run tsc",
     "dev": "ts-node-dev — respawn — pretty — transpile-only index.ts",
     "test": "npm test"
   },
