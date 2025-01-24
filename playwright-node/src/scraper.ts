@@ -24,13 +24,7 @@ const scrape = async (url: string) => {
   // Launch a headless browser instance in a cloud mode
   console.log("attempting to launch chromium");
   const browser = await chromium.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-    ],
+    headless: false,
   });
   console.log("attempting to create new context");
   const context = await browser.newContext();
