@@ -20,19 +20,27 @@ export const scraper = async (url: string) => {
 // navigates to the specified url and scrapes first ten articles on the page
 // returns an array of objects with strings
 const scrape = async (url: string) => {
+  console.log("Chromium Executable Path:", chromium.executablePath());
   // Launch a headless browser instance in a cloud mode
   console.log("attempting to launch chromium");
   const browser = await chromium.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
   });
+  console.log("attempting to create new context");
   const context = await browser.newContext();
   // Open a new page
+  console.log("attempting to open a new page");
   const page = await context.newPage();
   console.log("attempting to go to page");
   // Go to the specified url
-  await page.goto(url, { timeout: 30000 });
-
+  await page.goto(url, { timeout: 60000 });
+  console.log("attempting to evaluate");
   // Evaluate page
   const links = await page.evaluate(() => {
     // Get all anchors that are children of 'titleline' spans
