@@ -1,10 +1,10 @@
 {
   "name": "playwright-node",
   "version": "1.0.0",
-  "main": "index.ts",
-  "type": "module",
+  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "node ./src/index.js",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
     "build": "npm install && npm install --dev && npm run tsc",
@@ -20,8 +20,7 @@
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
     "nodemon": "^3.1.9",
-    "playwright": "^1.50.0",
-    "ts-node": "^10.9.2"
+    "playwright": "^1.50.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -30,8 +29,6 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.10",
     "@typescript-eslint/parser": "^8.21.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.3"
   }
 }
