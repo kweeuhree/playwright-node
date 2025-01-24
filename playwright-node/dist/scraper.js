@@ -1,19 +1,8 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-// Extract chromium from Playwright
-const { chromium } = require("playwright");
-// Define and declare asynchronous function that takes url as an argument
-const scraper = (url) => __awaiter(void 0, void 0, void 0, function* () {
+import { chromium } from "playwright";
+// scraper() takes in url as an argument and returns an array of articles or an error
+export const scraper = async (url) => {
     try {
-        const scrapedStr = yield scrape(url);
+        const scrapedStr = await scrape(url);
         if (scrapedStr) {
             const articles = prettify(scrapedStr);
             return articles;
@@ -22,34 +11,38 @@ const scraper = (url) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         throw new Error("failed to scrape");
     }
-});
-// Define and declare asynchronous function that takes url as an argument
-const scrape = (url) => __awaiter(void 0, void 0, void 0, function* () {
+};
+// scrape() takes in url as an argument, launches a new chromium window,
+// navigates to the specified url and scrapes first ten articles on the page
+// returns an array of objects with strings
+const scrape = async (url) => {
     // Launch a headless browser instance
-    const browser = yield chromium.launch({ headless: true });
-    const context = yield browser.newContext();
+    const browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext();
     // Open a new page
-    const page = yield context.newPage();
+    const page = await context.newPage();
     // Go to the specified url
-    yield page.goto(url);
+    await page.goto(url);
     // Evaluate page
-    const links = yield page.evaluate(() => {
+    const links = await page.evaluate(() => {
         // Get all anchors that are children of 'titleline' spans
         const anchors = document.querySelectorAll("span.titleline > a");
         const result = [];
         // Loop through anchors
         anchors.forEach((anchor) => {
+            const anch = anchor;
             // If result array length is less than ten push new element
-            result.length < 10
-                ? result.push([anchor.innerHTML, "-", anchor.href])
-                : null;
+            result.length < 10 ? result.push([anch.innerHTML, "-", anch.href]) : null;
         });
         return result.join("\n");
     });
     // Close browser instance
     browser.close();
     return links;
-});
+};
+// prettify() takes in string as an argument and
+// splits each item in the string into title:url pairs
+// returns an array of objects with strings
 const prettify = (string) => {
     // Split the string by newlines to get an array of title-url pairs
     const articles = string.split("\n").map((item) => {
@@ -58,4 +51,3 @@ const prettify = (string) => {
     });
     return articles;
 };
-module.exports = scraper;
