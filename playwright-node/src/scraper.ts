@@ -3,8 +3,11 @@ import { chromium } from "playwright";
 // scraper() takes in url as an argument and returns an array of articles or an error
 export const scraper = async (url: string) => {
   try {
+    console.log("attempting to scrape");
     const scrapedStr = await scrape(url);
+    console.log("scraped");
     if (scrapedStr) {
+      console.log("attempting to prettify");
       const articles = prettify(scrapedStr);
       return articles;
     }
@@ -18,6 +21,7 @@ export const scraper = async (url: string) => {
 // returns an array of objects with strings
 const scrape = async (url: string) => {
   // Launch a headless browser instance in a cloud mode
+  console.log("attempting to launch chromium");
   const browser = await chromium.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -25,6 +29,7 @@ const scrape = async (url: string) => {
   const context = await browser.newContext();
   // Open a new page
   const page = await context.newPage();
+  console.log("attempting to go to page");
   // Go to the specified url
   await page.goto(url, { timeout: 30000 });
 
