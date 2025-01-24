@@ -1,10 +1,10 @@
 {
   "name": "playwright-node",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "start": "ts-node ./src/index.ts",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
     "build": "npm install && npm install --dev && npm run tsc",
