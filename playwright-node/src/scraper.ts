@@ -23,38 +23,52 @@ const scrape = async (url: string) => {
   console.log("Chromium Executable Path:", chromium.executablePath());
   // Launch a headless browser instance in a cloud mode
   console.log("attempting to launch chromium");
-  const browser = await chromium.launch({
-    headless: false,
-  });
-  console.log("attempting to create new context");
-  const context = await browser.newContext();
-  // Open a new page
-  console.log("attempting to open a new page");
-  const page = await context.newPage();
-  console.log("attempting to go to page");
-  // Go to the specified url
-  await page.goto(url, { timeout: 60000 });
-  console.log("attempting to evaluate");
-  // Evaluate page
-  const links = await page.evaluate(() => {
-    // Get all anchors that are children of 'titleline' spans
-    const anchors = document.querySelectorAll("span.titleline > a");
-    const result: string[][] = [];
+  try {
+    const browser = await chromium.launch({
+      headless: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--single-process",
+        "--disable-gpu",
+      ],
+    });
+    console.log("Chromium launched successfully!");
+    console.log("attempting to create new context");
+    const context = await browser.newContext();
+    // Open a new page
+    console.log("attempting to open a new page");
+    const page = await context.newPage();
+    console.log("attempting to go to page");
+    // Go to the specified url
+    await page.goto(url, { timeout: 60000 });
+    console.log("attempting to evaluate");
+    // Evaluate page
+    const links = await page.evaluate(() => {
+      // Get all anchors that are children of 'titleline' spans
+      const anchors = document.querySelectorAll("span.titleline > a");
+      const result: string[][] = [];
 
-    // Loop through anchors
-    anchors.forEach((anchor) => {
-      const anch = anchor as HTMLAnchorElement;
-      // If result array length is less than ten push new element
-      result.length < 10 ? result.push([anch.innerHTML, "-", anch.href]) : null;
+      // Loop through anchors
+      anchors.forEach((anchor) => {
+        const anch = anchor as HTMLAnchorElement;
+        // If result array length is less than ten push new element
+        result.length < 10
+          ? result.push([anch.innerHTML, "-", anch.href])
+          : null;
+      });
+
+      return result.join("\n");
     });
 
-    return result.join("\n");
-  });
+    // Close browser instance
+    browser.close();
 
-  // Close browser instance
-  browser.close();
-
-  return links;
+    return links;
+  } catch (error) {
+    console.error("Failed to launch Chromium:", error);
+  }
 };
 
 // prettify() takes in string as an argument and
