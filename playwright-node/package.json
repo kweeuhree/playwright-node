@@ -7,7 +7,8 @@
     "start": "node ./src/index.js",
     "tsc": "tsc",
     "postinstall": "playwright install chromium",
-    "build": "npm install && npm install --dev && npx playwright install && npm run tsc",
+    "install-deps": "apt-get update && apt-get install -y libgtk-4-1 libgraphene-1.0-0 libgstgl-1.0-0 libgstcodecparsers-1.0-0 libavif15 libenchant2-2 libsecret-1-0 libmanette0.2-0 libglesv2-2",
+    "build": "npm install && npm run install-deps && npx playwright install --with-deps && npm run tsc",
     "dev": "ts-node-dev — respawn — pretty — transpile-only index.ts",
     "test": "npm test"
   },
