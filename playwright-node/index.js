@@ -1,5 +1,3 @@
-// import { loggerMiddleware, errorHandlerMiddleware } from "./middleware";
-
 const express = require("express");
 const app = express();
 const cors = require("cors");
