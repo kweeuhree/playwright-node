@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { loggerMiddleware, errorHandlerMiddleware } from "./middleware";
-import { router } from "./routes";
+import { loggerMiddleware, errorHandlerMiddleware } from "./middleware.js";
+import { router } from "./routes.js";
 dotenv.config();
 // Initialize an express app
 const app = express();
@@ -11,9 +11,9 @@ const PORT = process.env.PORT || 3000;
 const localhost = process.env.LOCALHOST;
 // Set up cors config
 const corsConfig = {
-    origin: localhost, // Allowed origins
-    methods: "POST",
-    credentials: false,
+  origin: localhost, // Allowed origins
+  methods: "POST",
+  credentials: false,
 };
 // Serve static files
 app.use(express.static("./static/dist"));
@@ -28,5 +28,5 @@ app.use("/api", router);
 app.use(errorHandlerMiddleware);
 // Start the server
 app.listen(PORT, () => {
-    console.log(`INFO\tStarting server on port ${PORT}...`);
+  console.log(`INFO\tStarting server on port ${PORT}...`);
 });
