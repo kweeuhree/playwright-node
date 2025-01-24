@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "tsc": "tsc",
-    "postinstall": "npx playwright install --with-deps && playwright install chromium",
+    "postinstall": "playwright install chromium",
     "build": "npm install && npm install --dev && npm run tsc",
     "dev": "ts-node-dev — respawn — pretty — transpile-only index.ts",
     "test": "npm test"
