@@ -19,7 +19,7 @@ const corsConfig = {
 };
 
 // Serve static files
-app.use(express.static("static"));
+app.use(express.static("./static/dist"));
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
