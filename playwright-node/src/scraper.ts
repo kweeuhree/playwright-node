@@ -1,8 +1,7 @@
-// Extract chromium from Playwright
-const { chromium } = require("playwright");
+import { chromium } from "playwright";
 
 // Define and declare asynchronous function that takes url as an argument
-const scraper = async (url) => {
+export const scraper = async (url: string) => {
   try {
     const scrapedStr = await scrape(url);
     if (scrapedStr) {
@@ -15,7 +14,7 @@ const scraper = async (url) => {
 };
 
 // Define and declare asynchronous function that takes url as an argument
-const scrape = async (url) => {
+const scrape = async (url: string) => {
   // Launch a headless browser instance
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
@@ -28,14 +27,13 @@ const scrape = async (url) => {
   const links = await page.evaluate(() => {
     // Get all anchors that are children of 'titleline' spans
     const anchors = document.querySelectorAll("span.titleline > a");
-    const result = [];
+    const result: string[][] = [];
 
     // Loop through anchors
     anchors.forEach((anchor) => {
+      const anch = anchor as HTMLAnchorElement;
       // If result array length is less than ten push new element
-      result.length < 10
-        ? result.push([anchor.innerHTML, "-", anchor.href])
-        : null;
+      result.length < 10 ? result.push([anch.innerHTML, "-", anch.href]) : null;
     });
 
     return result.join("\n");
@@ -47,7 +45,7 @@ const scrape = async (url) => {
   return links;
 };
 
-const prettify = (string) => {
+const prettify = (string: string) => {
   // Split the string by newlines to get an array of title-url pairs
   const articles = string.split("\n").map((item) => {
     const [title, url] = item.split(",-,");
@@ -56,5 +54,3 @@ const prettify = (string) => {
 
   return articles;
 };
-
-module.exports = scraper;

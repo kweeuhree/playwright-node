@@ -1,10 +1,10 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const { loggerMiddleware, errorHandlerMiddleware } = require("./middleware");
-const router = require("./routes");
-
+import express from "express";
+import cors from "cors";
+import { loggerMiddleware, errorHandlerMiddleware } from "./middleware";
+import { router } from "./routes";
 require("dotenv").config();
+
+const app = express();
 
 const PORT = process.env.PORT || 3000;
 const localhost = process.env.LOCALHOST;
