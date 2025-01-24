@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import { loggerMiddleware, errorHandlerMiddleware } from "./middleware";
 import { router } from "./routes";
-require("dotenv").config();
+
+dotenv.config();
 
 // Initialize an express app
 const app = express();
