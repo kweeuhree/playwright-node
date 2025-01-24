@@ -26,6 +26,7 @@ const scrape = async (url: string) => {
   try {
     const browser = await chromium.launch({
       headless: true,
+      executablePath: chromium.executablePath(),
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
