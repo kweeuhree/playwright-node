@@ -17,13 +17,16 @@ export const scraper = async (url: string) => {
 // navigates to the specified url and scrapes first ten articles on the page
 // returns an array of objects with strings
 const scrape = async (url: string) => {
-  // Launch a headless browser instance
-  const browser = await chromium.launch({ headless: true });
+  // Launch a headless browser instance in a cloud mode
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const context = await browser.newContext();
   // Open a new page
   const page = await context.newPage();
   // Go to the specified url
-  await page.goto(url);
+  await page.goto(url, { timeout: 30000 });
 
   // Evaluate page
   const links = await page.evaluate(() => {
