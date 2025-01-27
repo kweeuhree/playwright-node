@@ -11,12 +11,20 @@ const app = express();
 
 // Define port
 const PORT = process.env.PORT || 3000;
-const localhost = process.env.LOCALHOST;
+
+// Define allowed origins: localhost for development, render for production
+const allowedOrigins = [process.env.LOCALHOST, process.env.REACT_ON_RENDER];
 
 // Set up cors config
-const corsConfig = {
-  origin: localhost, // Allowed origins
-  methods: "POST",
+const corsConfig: cors.CorsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: "GET,HEAD,POST",
   credentials: false,
 };
 
@@ -25,9 +33,10 @@ app.use(express.static("./static/dist"));
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
+app.options("*", cors(corsConfig));
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(loggerMiddleware);
-app.use(cors(corsConfig));
 
 // Routes
 app.use("/api", router);
