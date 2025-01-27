@@ -1,9 +1,6 @@
 # Use the official Playwright image
 FROM mcr.microsoft.com/playwright:v1.50.0-noble AS base
 
-# Set default port
-ENV PORT=${PORT}
-
 # Set working directory
 WORKDIR /usr/src/app
 
