@@ -3,12 +3,9 @@ import { chromium } from "playwright";
 // scraper() takes in url as an argument and returns an array of articles or an error
 export const scraper = async (url: string) => {
   try {
-    console.log("attempting to scrape");
     const scrapedStr = await scrape(url);
-    console.log("scraped");
     if (scrapedStr) {
-      console.log("attempting to prettify");
-      const articles = prettify(scrapedStr);
+      const articles = format(scrapedStr);
       return articles;
     }
   } catch (error) {
@@ -20,31 +17,16 @@ export const scraper = async (url: string) => {
 // navigates to the specified url and scrapes first ten articles on the page
 // returns an array of objects with strings
 const scrape = async (url: string) => {
-  console.log("Chromium Executable Path:", chromium.executablePath());
   // Launch a headless browser instance in a cloud mode
-  console.log("attempting to launch chromium");
   try {
     const browser = await chromium.launch({
       headless: true,
-      executablePath: chromium.executablePath(),
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--single-process",
-        "--disable-gpu",
-      ],
     });
-    console.log("Chromium launched successfully!");
-    console.log("attempting to create new context");
     const context = await browser.newContext();
     // Open a new page
-    console.log("attempting to open a new page");
     const page = await context.newPage();
-    console.log("attempting to go to page");
     // Go to the specified url
     await page.goto(url, { timeout: 60000 });
-    console.log("attempting to evaluate");
     // Evaluate page
     const links = await page.evaluate(() => {
       // Get all anchors that are children of 'titleline' spans
@@ -72,10 +54,10 @@ const scrape = async (url: string) => {
   }
 };
 
-// prettify() takes in string as an argument and
+// format() takes in string as an argument and
 // splits each item in the string into title:url pairs
 // returns an array of objects with strings
-const prettify = (string: string) => {
+const format = (string: string) => {
   // Split the string by newlines to get an array of title-url pairs
   const articles = string.split("\n").map((item) => {
     const [title, url] = item.split(",-,");
