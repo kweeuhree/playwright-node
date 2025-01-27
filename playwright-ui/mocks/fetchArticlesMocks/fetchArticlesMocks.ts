@@ -1,3 +1,5 @@
+// This file contains mock data for fetchArticles() test
+
 interface MockResponse {
   title: string;
   url: string;

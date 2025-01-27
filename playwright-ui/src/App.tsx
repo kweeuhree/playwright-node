@@ -26,7 +26,7 @@ const Article = ({ url, title }: Article) => {
 
 // Main component
 export const App = () => {
-  // useStatus will provide relevant fetching status, and allow to set the status
+  // useStatus() will provide relevant fetching status, and allow to set the status
   const { status, setStatus, statusOptions, setTimedStatus } = useStatus();
   // Set state that will track display of fetched data
   const [display, setDisplay] = useState<Article[]>([]);
