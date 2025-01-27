@@ -8,7 +8,7 @@ export const loggerMiddleware = (
   next: NextFunction
 ) => {
   const logDetails = {
-    timestamp: new Date().toDateString(),
+    timestamp: new Date().toLocaleString(),
     method: req.method,
     body: req.body,
   };
@@ -28,7 +28,7 @@ export const errorHandlerMiddleware = (
   next: NextFunction
 ) => {
   const errDetails = {
-    timestamp: new Date().toDateString(),
+    timestamp: new Date().toLocaleString(),
     err,
   };
 
