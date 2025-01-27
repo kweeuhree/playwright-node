@@ -11,25 +11,26 @@ interface Article {
 }
 
 export const App = () => {
-  const { status, setStatus, statusOptions } = useStatus();
+  const { status, setStatus, statusOptions, setTimedStatus } = useStatus();
   const [display, setDisplay] = useState<Article[]>([]);
 
   const fetched = display.length > 0;
 
   const alreadyFetched = () => {
-    setStatus(statusOptions.fetched);
-    setTimeout(() => {
-      setStatus("");
-    }, 500);
+    setTimedStatus("");
   };
 
   const getArticles = async () => {
     setStatus(statusOptions.loading);
-    const articles = await fetchArticles();
-    if (articles) {
-      setDisplay(articles);
+    try {
+      const articles = await fetchArticles();
+      if (articles) {
+        setDisplay(articles);
+        setStatus("");
+      }
+    } catch {
+      setStatus(statusOptions.error);
     }
-    setStatus("");
   };
 
   const handleClick = () => {
