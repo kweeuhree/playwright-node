@@ -17,7 +17,7 @@ export const App = () => {
   const fetched = display.length > 0;
 
   const alreadyFetched = () => {
-    setTimedStatus("");
+    setTimedStatus(statusOptions.fetched);
   };
 
   const getArticles = async () => {
