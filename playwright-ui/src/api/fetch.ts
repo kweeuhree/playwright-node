@@ -1,9 +1,12 @@
-const errorResponse = "Something went wrong.";
+const target =
+  import.meta.env.VITE_NODE_ENV === "development"
+    ? import.meta.env.VITE_LOCALHOST
+    : import.meta.env.VITE_ON_RENDER;
 
 export const fetchArticles = async () => {
   const url = JSON.stringify({ url: "https://news.ycombinator.com/" });
   try {
-    const response = await fetch("/api/articles", {
+    const response = await fetch(`${target}/api/articles`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: url,
@@ -14,6 +17,8 @@ export const fetchArticles = async () => {
       return data;
     }
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : errorResponse);
+    throw new Error(
+      error instanceof Error ? error.message : "failed to fetch articles"
+    );
   }
 };
