@@ -4,9 +4,17 @@ export const useStatus = () => {
   const statusOptions = {
     fetched: "Already fetched!",
     loading: "Loading...",
+    error: "Something went wrong.",
   };
 
   const [status, setStatus] = useState("");
 
-  return { status, setStatus, statusOptions };
+  const setTimedStatus = (newStatus: string) => {
+    setStatus(newStatus);
+    setTimeout(() => {
+      setStatus("");
+    }, 500);
+  };
+
+  return { status, setStatus, statusOptions, setTimedStatus };
 };
