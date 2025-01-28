@@ -17,9 +17,7 @@ export const scraper = async (url: string) => {
 // navigates to the specified url and scrapes first ten articles on the page
 // returns an array of objects with strings
 const scrape = async (url: string) => {
-  console.log("chromium exe path:");
-  console.log(chromium.executablePath());
-  // Launch a headless browser instance in a cloud mode
+  // Launch a headless browser instance
   try {
     const browser = await chromium.launch({
       headless: true,

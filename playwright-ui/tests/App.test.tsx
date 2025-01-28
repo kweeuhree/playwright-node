@@ -22,13 +22,4 @@ describe("App component", () => {
     const button = screen.getByText("Click me");
     expect(button).toBeInTheDocument();
   });
-
-  // it("displays correct status on click of 'Click me' button", async () => {
-  //   render(<App />);
-
-  //   const button = screen.getByText("Click me");
-  //   fireEvent.click(button);
-  //   const loading = screen.findByText("Loading...");
-  //   expect(loading).toBeInTheDocument();
-  // });
 });
