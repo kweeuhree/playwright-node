@@ -5,6 +5,8 @@ test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
 });
 
+test.describe.configure({ mode: "parallel" });
+
 test.describe("Articles", () => {
   test("10 articles total", async ({ page }) => {
     test.slow();
