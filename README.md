@@ -71,3 +71,27 @@ Articles tests are run in parallel as they are slow.
 ## ⚙️ Continuous Integration
 
 In order to automate the testing, a GitHub Actions workflow is set up. The workflow executes all existing tests on push to the master branch of the repository. This helps to ensure code quality and catch issues early on.
+
+## 📚 Challenges and learning
+
+**Playwright**
+While scraping 100 articles, had some struggles with clicking on an element, which seems to be solved with forcing the click and awating the loading of the page:
+
+```typescript
+const loadPromise = page.waitForEvent("load");
+await page.waitForSelector("a.morelink", {
+  state: "attached",
+  timeout: 5000,
+});
+await page.locator("a.morelink").click({ force: true });
+await loadPromise;
+```
+
+**Docker**
+This was my first time using Docker.
+
+Initially, I tried to deploy the service without a Docker image, but the deployment failed due to issues installing Playwright browsers and necessary dependencies in the cloud. I would run into request timeout issues or authorization issues.
+
+The solution was to create an environment that will contain all of the necessary dependencies. The official Playwright image builds blazingly fast compared to manually installing the dependencies.
+
+The service is using the latest official Playwright image, which is deployed on Render on a free tier.
