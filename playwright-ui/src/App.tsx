@@ -11,10 +11,17 @@ interface Article {
   url: string;
 }
 
+type Data = {
+  articles: Article[];
+  validation: string;
+};
+
+const cardStyle = "bd-white white-hover pd-2 m-02";
+
 // Article displays url and title of an article
 const Article = ({ url, title }: Article) => {
   return (
-    <div key={url} className="white-bd white-hover pd-2 m-02">
+    <div key={url} className={cardStyle}>
       <p>{title}</p>
       {/* Open url in a new tab */}
       <a href={url} target="_blank">
@@ -29,9 +36,12 @@ export const App = () => {
   // useStatus() will provide relevant fetching status, and allow to set the status
   const { status, setStatus, statusOptions, setTimedStatus } = useStatus();
   // Set state that will track display of fetched data
-  const [display, setDisplay] = useState<Article[]>([]);
+  const [display, setDisplay] = useState<Data>({
+    articles: [],
+    validation: "",
+  });
   // Define a variable that will track whether data for display is fetched
-  const fetched = display.length > 0;
+  const fetched = display.articles.length > 0;
 
   // alreadyFetched() sets a relevant status if data has been already fetched
   const alreadyFetched = () => {
@@ -68,8 +78,14 @@ export const App = () => {
       </button>
       {/* Display operation status if exists */}
       <div>{status !== "" && status}</div>
+      {display.validation && (
+        <div id="validation" className={`${cardStyle} bg-white`}>
+          {display.validation}
+        </div>
+      )}
       {/* Display an Article component per each object in state */}
-      {display && display.map((article) => <Article {...article} />)}
+      {display.articles &&
+        display.articles.map((article) => <Article {...article} />)}
     </div>
   );
 };
