@@ -20,9 +20,9 @@ Deployed backend service: [Node.js Scraping Service on Render](https://playwrigh
 
 ## 🧱 Project structure
 
-**Backend (Node.js+TypeScript, Docker)**: scrapes YCombinator's latest 10 articles.
+**Backend (Node.js+TypeScript, Docker)**: scrapes YCombinator's articles, returns titles and urls of the first 10 and validates order of the first 100.
 
-**Frontend (React.js+TypeScript)**: displays the articles, provides a button to trigger the request, and displays relevant status messages.
+**Frontend (React.js+TypeScript)**: displays the articles, provides a button to trigger the request, and displays relevant status and order validation messages.
 
 **Playwright Tests**: ensure that the application works as expected.
 
@@ -75,6 +75,7 @@ In order to automate the testing, a GitHub Actions workflow is set up. The workf
 ## 📚 Challenges and learning
 
 **Playwright**
+
 While scraping 100 articles, had some struggles with clicking on an element, which seems to be solved with forcing the click and awating the loading of the page:
 
 ```typescript
@@ -88,6 +89,7 @@ await loadPromise;
 ```
 
 **Docker**
+
 This was my first time using Docker.
 
 Initially, I tried to deploy the service without a Docker image, but the deployment failed due to issues installing Playwright browsers and necessary dependencies in the cloud. I would run into request timeout issues or authorization issues.
