@@ -7,7 +7,9 @@ The application is deployed on Render, with the backend being served from a Dock
 ## 🧱 Project structure
 
 **Backend (Node.js+TypeScript, Docker)**: scrapes YCombinator's latest 10 articles.
+
 **Frontend (React.js+TypeScript)**: displays the articles, provides a button to trigger the request, and displays relevant status messages.
+
 **Playwright Tests**: ensure that the application works as expected.
 
 ## 🔍 Prerequisites
@@ -26,7 +28,7 @@ To ensure that the tests pass, **follow the usage guide** below:
 - Await for the remote server to be spun up;
 - Await for the successful response.
 
-Now Playwright tests can be run.
+Now the Playwright tests can be run.
 
 #### Run the Tests
 
@@ -35,6 +37,7 @@ Now Playwright tests can be run.
 - In the project folder, run the following command:
 
 ```bash
+npm install
 npx playwright test
 ```
 
@@ -45,7 +48,7 @@ Tests are grouped into following files:
 - **Api**: tests request and response headers;
 - **Articles**: tests the amount and structure of displayed articles, ensures that each article opens in a new tab;
 - **Button**: tests button style changes;
-- **Page**: ensures that the main page has title, header and a button;
+- **Page**: ensures that the main page has title, header, button, and displays all expected objects;
 - **Status**: tests status message displayed to the user under various scenarios;
 - **testdata**: abstracts data that is reused across tests.
 
