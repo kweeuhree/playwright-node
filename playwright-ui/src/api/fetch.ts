@@ -7,7 +7,7 @@ const target =
 // fetchArticles() attempts to fetch articles from the API
 export const fetchArticles = async () => {
   // Prepare the request string
-  const url = JSON.stringify({ url: "https://news.ycombinator.com/" });
+  const url = JSON.stringify({ url: "https://news.ycombinator.com/newest" });
   try {
     // Attempt sending a POST request to the remote server
     const response = await fetch(`${target}/api/articles`, {
