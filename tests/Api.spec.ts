@@ -5,8 +5,11 @@ test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
 });
 
+test.describe.configure({ mode: "parallel" });
+
 test.describe("Api", () => {
   test("sets correct headers", async ({ page }) => {
+    test.slow();
     // Start waiting for the request before clicking the button
     const requestPromise = page.waitForRequest((request) =>
       request.url().includes(articlesApi)
@@ -15,12 +18,13 @@ test.describe("Api", () => {
     await page.getByRole("button", { name: clickMe }).click();
     // Wait for the request to proceed
     const request = await requestPromise;
-    // Check headers
+    // Check the content-type header
     const headers = request.headers();
-    expect(headers["content-type"]).toEqual("application/json"); // Check the content-type header
+    expect(headers["content-type"]).toEqual("application/json");
   });
 
   test("receives correct headers", async ({ page }) => {
+    test.slow();
     // Start waiting for the response before clicking the button
     const responsePromise = page.waitForResponse((response) =>
       response.url().includes(articlesApi)

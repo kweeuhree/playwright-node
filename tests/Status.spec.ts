@@ -1,5 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { baseUrl, clickMe, statusOptions, articlesApi } from "./testdata";
+import {
+  baseUrl,
+  clickMe,
+  statusOptions,
+  articlesApi,
+  successfulResponse,
+} from "./testdata";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
@@ -21,9 +27,7 @@ test.describe("Status", () => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify(
-          Array.from([{ title: "Article 1", url: "https://scrape.com" }])
-        ),
+        body: JSON.stringify(successfulResponse),
       });
     });
     // Click the "Click me" button to send request

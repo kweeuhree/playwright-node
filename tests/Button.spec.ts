@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { baseUrl, clickMe, articlesApi } from "./testdata";
+import { baseUrl, clickMe, articlesApi, successfulResponse } from "./testdata";
 
 test.describe("`Click me` button", () => {
   test("`Click me` button changes color to gray after successful server response", async ({
@@ -13,11 +13,10 @@ test.describe("`Click me` button", () => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify(
-          Array.from([{ title: "Article 1", url: "https://scrape.com" }])
-        ),
+        body: JSON.stringify(successfulResponse),
       });
     });
+
     // Click the "Click me" button
     await clickMebutton.click();
     // Expect button to change style
