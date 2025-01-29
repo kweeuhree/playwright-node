@@ -4,6 +4,9 @@ This repository contains a simple full-stack application that scrapes first ten 
 The goal of the project is to provide integration tests using Playwright to ensure that the application functions as expected.
 The application is deployed on Render, with the backend being served from a Docker image.
 
+Deployed frontend service: [React application on Render](https://playwright-ui.onrender.com)
+Deployed backend service: [Node.js Scraping Service on Render](https://playwright-app.onrender.com)
+
 ## 🧱 Project structure
 
 **Backend (Node.js+TypeScript, Docker)**: scrapes YCombinator's latest 10 articles.

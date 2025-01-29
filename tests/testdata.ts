@@ -16,6 +16,6 @@ export const articlesApi = "/api/articles";
 
 // Mock successful server response
 export const successfulResponse = {
-  articles: [{ title: "Article 1", url: "https://scrape.com" }, ,],
+  articles: [{ title: "Article 1", url: "https://scrape.com" }],
   validation: "valid",
 };
