@@ -1,32 +1,52 @@
-import { chromium } from "playwright";
+import { chromium, Page } from "playwright";
 
-// scraper() takes in url as an argument and returns an array of articles or an error
+import { throwError, validateSort, format } from "./utils";
+
+// Define desired length constants
+export const ALMOST_DESIRED_LENGTH = 90;
+export const DESIRED_LENGTH = 100;
+
+const output = {
+  success: "EXACTLY the first 100 articles are sorted from newest to oldest",
+  failure: "failed to validate sorting",
+};
+// scraper() takes in url as an argument, launches a browser,
+//  and returns an array of articles and order validation result or an error
 export const scraper = async (url: string) => {
+  // Launch browser
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+  const pageGetsArticles = await context.newPage();
+  const pageValidatesOrder = await context.newPage();
   try {
-    const scrapedStr = await scrape(url);
-    if (scrapedStr) {
-      const articles = format(scrapedStr);
-      return articles;
-    }
-  } catch (error) {
-    throw new Error("failed to scrape");
+    const [articlesString, dateStrings] = await Promise.all([
+      scrapeArticles(pageGetsArticles, url),
+      scrapeToValidate(pageValidatesOrder, url),
+    ]);
+
+    const articles = articlesString && format(articlesString);
+    const validation =
+      dateStrings && validateSort(dateStrings) === true
+        ? output.success
+        : output.failure;
+
+    return { articles, validation };
+  } catch (error: any) {
+    throwError("failed at scraper", error.message);
+  } finally {
+    // Close browser instance
+    await browser.close();
   }
 };
 
-// scrape() takes in url as an argument, launches a new chromium window,
-// navigates to the specified url and scrapes first ten articles on the page
+// scrapeArticles() takes in url and a page as arguments, navigates to the specified url
+// and scrapes first ten articles on the page
 // returns an array of objects with strings
-const scrape = async (url: string) => {
+const scrapeArticles = async (page: Page, url: string) => {
   // Launch a headless browser instance
   try {
-    const browser = await chromium.launch({
-      headless: true,
-    });
-    const context = await browser.newContext();
-    // Open a new page
-    const page = await context.newPage();
     // Go to the specified url
-    await page.goto(url, { timeout: 60000 });
+    await page.goto(url);
     // Evaluate page
     const links = await page.evaluate(() => {
       // Get all anchors that are children of 'titleline' spans
@@ -45,24 +65,63 @@ const scrape = async (url: string) => {
       return result.join("\n");
     });
 
-    // Close browser instance
-    browser.close();
-
     return links;
-  } catch (error) {
-    console.error("Failed to launch Chromium:", error);
+  } catch (error: any) {
+    throwError("failed scraping artiles", error.message);
   }
 };
 
-// format() takes in string as an argument and
-// splits each item in the string into title:url pairs
-// returns an array of objects with strings
-const format = (string: string) => {
-  // Split the string by newlines to get an array of title-url pairs
-  const articles = string.split("\n").map((item) => {
-    const [title, url] = item.split(",-,");
-    return { title, url };
-  });
+// scrapeToValidate() takes in url and a page as arguments, navigates to the specified url
+// and scrapes first 100 article date strings on the page
+// returns an array with date strings
+const scrapeToValidate = async (page: Page, url: string) => {
+  try {
+    // Go to Hacker News
+    await page.goto(url);
+    // Initalize dateStrings array that will hold the resultant date strings
+    const dateStrings = [];
+    // Use do...while loop to get the first 100 dateStrings
+    do {
+      // Get 30 articles per iteration
+      const datesOf30Articles = await page.evaluate(() => {
+        // Get all spans containing span with "age" attribute
+        const ageSpans = document.querySelectorAll("span.age");
+        // Initalize a datesArray array that will hold a datesArray of dateStrings
+        const datesArray: string[] = [];
+        ageSpans.forEach((span) => {
+          const spanElement = span as HTMLSpanElement;
+          // Get span's datetime string, split by space to remove milliseconds
+          const date = spanElement.title.split(" ")[0];
+          // Push new date into the array
+          datesArray.push(new Date(date).toISOString());
+        });
+        // Return current datesArray of date strings
+        return datesArray;
+      });
 
-  return articles;
+      // In order to get exactly 100 dateStrings, push all strings or only push 10
+      dateStrings.length !== ALMOST_DESIRED_LENGTH
+        ? dateStrings.push(...datesOf30Articles)
+        : dateStrings.push(...datesOf30Articles.slice(0, 10));
+
+      // Do not click the button unless necessary
+      if (dateStrings.length < DESIRED_LENGTH) {
+        const loadPromise = page.waitForEvent("load");
+        await page.waitForSelector("a.morelink", {
+          state: "attached",
+          timeout: 5000,
+        });
+        await page.locator("a.morelink").click({ force: true });
+        await loadPromise;
+      } else {
+        break;
+      }
+      // Continue until dateStrings array achieves the desired length
+    } while (dateStrings.length < DESIRED_LENGTH);
+
+    return dateStrings;
+  } catch (error: any) {
+    console.log("failed scraping to validate", error.message);
+    return error.message;
+  }
 };
