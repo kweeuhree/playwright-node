@@ -1,11 +1,22 @@
 # 🌐 YCombinator Articles Scraper with Playwright Tests
 
-This repository contains a simple full-stack application that scrapes first ten articles from YCombinator.
-The goal of the project is to provide integration tests using Playwright to ensure that the application functions as expected.
-The application is deployed on Render, with the backend being served from a Docker image.
+This repository contains a simple full-stack application that scrapes articles from YCombinator.
+The first ten articles are scraped for their titles and URLs, which are then displayed in the React application. The first 100 articles are scraped for their timestamps, and their order is validated.
+
+The goal of this project is to implement integration tests using Playwright to ensure the application functions as expected.
+
+The application is deployed on Render, with the backend running in a Docker container.
 
 Deployed frontend service: [React application on Render](https://playwright-ui.onrender.com)
+
 Deployed backend service: [Node.js Scraping Service on Render](https://playwright-app.onrender.com)
+
+## Screenshots
+
+<p align="center">
+<img  width="600" src="https://github.com/kweeuhree/playwright-node/blob/master/screencapture/landing.png?raw=true" alt="Landing page" />
+<img  width="600" src="https://github.com/kweeuhree/playwright-node/blob/master/screencapture/success.png?raw=true" alt="Successful response result" />
+</p>
 
 ## 🧱 Project structure
 
