@@ -1,6 +1,6 @@
 import { chromium, Page } from "playwright";
 
-import { throwError, validateSort, format } from "./utils";
+import { throwError, validateSort } from "./utils";
 
 // Define desired length constants
 export const ALMOST_DESIRED_LENGTH = 90;
@@ -19,12 +19,11 @@ export const scraper = async (url: string) => {
   const pageGetsArticles = await context.newPage();
   const pageValidatesOrder = await context.newPage();
   try {
-    const [articlesString, dateStrings] = await Promise.all([
+    const [articles, dateStrings] = await Promise.all([
       scrapeArticles(pageGetsArticles, url),
       scrapeToValidate(pageValidatesOrder, url),
     ]);
 
-    const articles = articlesString && format(articlesString);
     const validation =
       dateStrings && validateSort(dateStrings) === true
         ? output.success
@@ -51,18 +50,18 @@ const scrapeArticles = async (page: Page, url: string) => {
     const links = await page.evaluate(() => {
       // Get all anchors that are children of 'titleline' spans
       const anchors = document.querySelectorAll("span.titleline > a");
-      const result: string[][] = [];
+      const result: { title: string; url: string }[] = [];
 
       // Loop through anchors
       anchors.forEach((anchor) => {
         const anch = anchor as HTMLAnchorElement;
         // If result array length is less than ten push new element
         result.length < 10
-          ? result.push([anch.innerHTML, "-", anch.href])
+          ? result.push({ title: anch.innerHTML, url: anch.href })
           : null;
       });
 
-      return result.join("\n");
+      return result;
     });
 
     return links;
