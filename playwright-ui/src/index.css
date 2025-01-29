@@ -67,7 +67,11 @@ button:focus-visible {
   }
 }
 
-.white-bd {
+.bg-white {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.bd-white {
   border: 1px solid whitesmoke;
 }
 
