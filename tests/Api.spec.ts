@@ -32,6 +32,7 @@ test.describe("Api", () => {
     // Click the "Click me" button
     await page.getByRole("button", { name: clickMe }).click();
     const response = await responsePromise;
+    await page.waitForTimeout(2000);
     // Expect request header to equal "application/json"
     const headers = response.headers();
     expect(headers["content-type"]).toEqual("application/json; charset=utf-8");

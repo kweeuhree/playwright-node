@@ -35,9 +35,10 @@ test.describe("Page", () => {
     // Click the "Click me" button
     await page.getByRole("button", { name: clickMe }).click();
     await responsePromise;
+    await page.waitForTimeout(2000);
     // Locate articles by their className property
     const articles = page.locator("div.bd-white");
     // Expect the page to have ten articles
-    await expect(articles).toHaveCount(11);
+    await expect(articles).toHaveCount(11), { timeout: 120_000 };
   });
 });

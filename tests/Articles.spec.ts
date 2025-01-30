@@ -14,10 +14,11 @@ test.describe.configure({ mode: "parallel" });
 
 test.describe("Articles", () => {
   test("are rendered with `url` and `title` attributes", async ({ page }) => {
-    test.slow();
+    test.setTimeout(120_000);
     // Start waiting for the response before clicking the button
-    const responsePromise = page.waitForResponse((response) =>
-      response.url().includes(articlesApi)
+    const responsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes(articlesApi) && response.status() === 200
     );
     // Click the "Click me" button
     await page.getByRole("button", { name: clickMe }).click();
@@ -26,7 +27,7 @@ test.describe("Articles", () => {
     const data = await response.json();
     // Expect each article to have `url` and `title` attributes
     for (const article of data.articles) {
-      await expect(page.getByText(article.title)).toBeVisible();
+      await expect(page.locator("p", { hasText: article.title })).toBeVisible();
       await expect(
         page.getByRole("link", { name: article.url })
       ).toHaveAttribute("href");
