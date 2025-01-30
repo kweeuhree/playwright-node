@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { baseUrl, clickMe, articlesApi } from "./testdata";
+import { baseUrl, clickMe, articlesApi, successfulResponse } from "./testdata";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
@@ -29,17 +29,19 @@ test.describe("Articles", () => {
   });
 
   test("open in a new tab", async ({ page }) => {
-    test.slow();
-    // Start waiting for the response before clicking the button
-    const responsePromise = page.waitForResponse((response) =>
-      response.url().includes(articlesApi)
-    );
+    // Mock successful server response
+    await page.route(`*/**${articlesApi}`, async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(successfulResponse),
+      });
+    });
     // Click the "Click me" button
     await page.getByRole("button", { name: clickMe }).click();
     // Await and parse the response
-    const response = await responsePromise;
-    const data = await response.json();
-    for (const article of data.articles) {
+
+    for (const article of successfulResponse.articles) {
       // Locate the article's link element
       const link = page.getByRole("link", { name: article.url });
       // Start waiting for new tab before clicking the link

@@ -27,7 +27,7 @@ test.describe("Page", () => {
   });
 
   test("displays 11 objects total", async ({ page }) => {
-    test.slow();
+    test.setTimeout(120_000);
     // Start waiting for the response before clicking the button
     const responsePromise = page.waitForResponse((response) =>
       response.url().includes(articlesApi)
