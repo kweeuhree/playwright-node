@@ -5,7 +5,7 @@ import {
   statusOptions,
   articlesApi,
   successfulResponse,
-} from "./testdata";
+} from "../testdata/testdata";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);

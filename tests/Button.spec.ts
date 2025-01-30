@@ -1,5 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { baseUrl, clickMe, articlesApi, successfulResponse } from "./testdata";
+import {
+  baseUrl,
+  clickMe,
+  articlesApi,
+  successfulResponse,
+} from "../testdata/testdata";
 
 test.describe("`Click me` button", () => {
   test("`Click me` button changes color to gray after successful server response", async ({

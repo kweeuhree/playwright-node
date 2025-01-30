@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { baseUrl, clickMe, articlesApi } from "./testdata";
+import { baseUrl, clickMe, articlesApi } from "../testdata/testdata";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
