@@ -63,3 +63,12 @@ tsx ./src/index.ts
 ```
 
 Make sure the backend server is running locally before running the local frontend application.
+
+## 🚀 Testing
+
+This project includes node runner tests for validateSort and throwError functions.
+To run the tests, in the project folder, run the following command:
+
+```bash
+node --test ./tests
+```
